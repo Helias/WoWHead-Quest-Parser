@@ -60,7 +60,12 @@
           starts = starts.replace(",;", ";");
           enders = enders.replace(",;", ";");
 
-          sql += "\n\n" + starts + "\n\n" + enders;
+          sql += "\n\n" + starts + "\n\n";
+
+          if (enders != "INSERT INTO creature_questender VALUES;")
+            sql += enders;
+          else
+           sql = sql.replace("DELETE FROM creature_questender WHERE id IN (" + entries[index] + ");", "");
 
           document.getElementById("SQL").innerHTML = sql;
         }
