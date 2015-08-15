@@ -11,6 +11,15 @@
 <script>
   function getEntries()
   {
+    // Reset the sql variables
+    del = [];
+    del[0] = "DELETE FROM creature_queststarter WHERE id IN (";
+    del[1] = "DELETE FROM creature_questender WHERE id IN (";
+    starts = "INSERT INTO creature_queststarter VALUES";
+    enders = "INSERT INTO creature_questender VALUES";
+    sql = "";
+    document.getElementById("SQL").innerHTML = "&nbsp;";
+
     var input = document.getElementById("entries").value;
     
     input = input.split(' ').join(''); //remove all spaces
