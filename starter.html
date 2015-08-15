@@ -1,0 +1,77 @@
+<style>
+  #entries, button { font-size: 25px; height: 75px; }
+</style>
+<center>
+  <br><br>
+  <input type="text" placeholder="12345, 12346, 12347, 12348" id="entries">
+  <button OnClick="getEntries(); parseNPC(0);">Extract!</button>
+  <br><br>
+  <textarea id="SQL" cols="100" rows="50"></textarea>
+</center>
+<script>
+  function getEntries()
+  {
+    var input = document.getElementById("entries").value;
+    
+    input = input.split(' ').join(''); //remove all spaces
+    entries = input.split(",");
+  }
+  
+  function parseNPC(index)
+  {
+    url = "window.php?url=http://www.wowhead.com/npc=" + entries[index] + "#starts";
+    win = window.open(url, "window", 10, 10, "menubar=0,toolbar=0");
+
+    // start timer to check if the window (win) has been closed
+    var timer = setInterval(function() {
+      if(window['win'][0].indexOf("starts") != null)
+      {
+        del[0] += window['win'][2] + ", ";
+        del[1] += window['win'][2] + ", ";
+
+        sql = del[0] + "\n" + del[1];
+
+        starts += window['win'][0];
+        enders += window['win'][1];
+
+        sql += "\n\n" + starts + "\n\n" + enders;
+
+        document.getElementById("SQL").innerHTML = sql;
+
+        clearInterval(timer);
+        if (entries.length-1 > index)
+        {
+          index++;
+          parseNPC(index);
+        }
+        else
+        {
+          del[0] += ");";
+          del[1] += ");";
+          var tmp = del[0] + "\n" + del[1];
+          tmp = tmp.replace(", );", ");");
+          tmp = tmp.replace(", );", ");");
+
+          sql = tmp;
+
+          starts += ";";
+          enders += ";";
+
+          starts = starts.replace(",;", ";");
+          enders = enders.replace(",;", ";");
+
+          sql += "\n\n" + starts + "\n\n" + enders;
+
+          document.getElementById("SQL").innerHTML = sql;
+        }
+      }  
+    }, 100); // each 0,1 seconds
+
+  }
+
+  var entries = [];
+  var url, win, starts = "INSERT INTO creature_queststarter VALUES", enders = "INSERT INTO creature_questender VALUES", del = [], sql;
+
+  del[0] = "DELETE FROM creature_queststarter WHERE id IN (";
+  del[1] = "DELETE FROM creature_questender WHERE id IN (";
+</script>
