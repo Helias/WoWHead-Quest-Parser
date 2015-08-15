@@ -1,18 +1,4 @@
 <?php
-function getHTML($url, $timeout)
-{
-  $ch = curl_init($url); // initialize curl with given url
-  curl_setopt($ch, CURLOPT_USERAGENT, "TrinityCore"); // set  useragent
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // write the response to a variable
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); // follow redirects if any
-  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout); // max. seconds to execute
-  curl_setopt($ch, CURLOPT_FAILONERROR, 1); // stop when it encounters an error
-  return @curl_exec($ch);
-}
-
-//echo getHTML("http://www.wowhead.com/npc=28701/#starts", 10);
-//echo file_get_contents("http://www.wowhead.com/npc=28701/#starts");
-
 echo file_get_contents($_GET['url']);
 
 // extracting id of the NPC
