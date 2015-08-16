@@ -15,10 +15,10 @@
   {
     // Reset the sql code variables
     del = [];
-    del[0] = "DELETE FROM creature_queststarter WHERE id IN (";
-    del[1] = "DELETE FROM creature_questender WHERE id IN (";
-    starts = "INSERT INTO creature_queststarter VALUES";
-    enders = "INSERT INTO creature_questender VALUES";
+    del[0] = "DELETE FROM `creature_queststarter` WHERE `id` IN (";
+    del[1] = "DELETE FROM `creature_questender` WHERE `id` IN (";
+    starts = "INSERT INTO `creature_queststarter` VALUES";
+    enders = "INSERT INTO `creature_questender` VALUES";
     sql = "";
     document.getElementById("SQL").value = "";
 
@@ -91,16 +91,16 @@
 
           sql += "\n\n" + starts + "\n\n" + enders;
 
-          if (sql.indexOf("DELETE FROM creature_queststarter WHERE id IN ();" > -1))
+          if (sql.indexOf("DELETE FROM `creature_queststarter` WHERE `id` IN ();" > -1))
           {
-              sql = sql.replace("DELETE FROM creature_queststarter WHERE id IN ();\n", "");
-              sql = sql.replace("\nINSERT INTO creature_queststarter VALUES;\n", "");
+              sql = sql.replace("DELETE FROM `creature_queststarter` WHERE `id` IN ();\n", "");
+              sql = sql.replace("\nINSERT INTO `creature_queststarter` VALUES;\n", "");
           }
 
-          if (sql.indexOf("DELETE FROM creature_questender WHERE id IN ();" > -1))
+          if (sql.indexOf("DELETE FROM `creature_questender` WHERE `id` IN ();" > -1))
           {
-            sql = sql.replace("DELETE FROM creature_questender WHERE id IN ();\n", "");
-            sql = sql.replace("\nINSERT INTO creature_questender VALUES;", "");
+            sql = sql.replace("DELETE FROM `creature_questender` WHERE `id` IN ();\n", "");
+            sql = sql.replace("\nINSERT INTO `creature_questender` VALUES;", "");
           }
 
           document.getElementById("SQL").value = sql;
@@ -111,10 +111,10 @@
   }
 
   var entries = [];
-  var url, win, starts = "INSERT INTO creature_queststarter VALUES", enders = "INSERT INTO creature_questender VALUES", del = [], sql;
+  var url, win, starts = "INSERT INTO `creature_queststarter` VALUES", enders = "INSERT INTO `creature_questender` VALUES", del = [], sql;
 
-  del[0] = "DELETE FROM creature_queststarter WHERE id IN (";
-  del[1] = "DELETE FROM creature_questender WHERE id IN (";
+  del[0] = "DELETE FROM `creature_queststarter` WHERE `id` IN (";
+  del[1] = "DELETE FROM `creature_questender` WHERE `id` IN (";
 </script>
 
 <center>  Coded By <a href="https://github.com/Helias">Helias</a></center>
