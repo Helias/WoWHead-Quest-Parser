@@ -1,5 +1,6 @@
 <style>
   #entries, button { font-size: 25px; height: 75px; }
+  textarea { font-size: 20px; }
 </style>
 <center>
   <br><br>
@@ -11,21 +12,21 @@
 <script>
   function getEntries()
   {
-    // Reset the sql variables
+    // Reset the sql code variables
     del = [];
     del[0] = "DELETE FROM creature_queststarter WHERE id IN (";
     del[1] = "DELETE FROM creature_questender WHERE id IN (";
     starts = "INSERT INTO creature_queststarter VALUES";
     enders = "INSERT INTO creature_questender VALUES";
     sql = "";
-    document.getElementById("SQL").innerHTML = "&nbsp;";
+    document.getElementById("SQL").value = "";
 
     var input = document.getElementById("entries").value;
-    
+
     input = input.split(' ').join(''); //remove all spaces
     entries = input.split(",");
   }
-  
+
   function parseNPC(index)
   {
     url = "window.php?url=http://www.wowhead.com/npc=" + entries[index] + "#starts";
@@ -33,19 +34,36 @@
 
     // start timer to check if the window (win) has been closed
     var timer = setInterval(function() {
-      if(window['win'][0].indexOf("starts") != null)
+      if(window['win'][0].indexOf("starts") != null || window['win'][1].indexOf("starts") != null)
       {
-        del[0] += window['win'][2] + ", ";
-        del[1] += window['win'][2] + ", ";
+        var windowData = window['win']; // window['win'] is the data that the window pass to the window parent
+        /*
+          windowData[0]: ids of the quests starter, it is "empty" if the creature hans't any quest starts
+          windowData[1]: ids of the quests ender, it is "empty" if the creature hans't any quest ends
+          windowData[2]: is the id of the NPC
+          windowData[3]: boolean value if the npc has starts quest or not
+          windowData[4]: boolean value if the npc has ends quest or not
+        */
 
-        sql = del[0] + "\n" + del[1];
+        sql = "";
 
-        starts += window['win'][0];
-        enders += window['win'][1];
+        if (windowData[3])
+          del[0] += windowData[2] + ", ";
 
-        sql += "\n\n" + starts + "\n\n" + enders;
+        if (windowData[4])
+          del[1] += windowData[2] + ", ";
 
-        document.getElementById("SQL").innerHTML = sql;
+        sql += del[0] + "\n" + del[1];
+
+        if (windowData[3])
+          starts += windowData[0];
+        if (windowData[4])
+          enders += windowData[1];
+
+        sql += "\n\n" + starts;
+        sql += "\n\n" + enders;
+
+        document.getElementById("SQL").value = sql;
 
         clearInterval(timer);
         if (entries.length-1 > index)
@@ -57,6 +75,7 @@
         {
           del[0] += ");";
           del[1] += ");";
+
           var tmp = del[0] + "\n" + del[1];
           tmp = tmp.replace(", );", ");");
           tmp = tmp.replace(", );", ");");
@@ -69,14 +88,21 @@
           starts = starts.replace(",;", ";");
           enders = enders.replace(",;", ";");
 
-          sql += "\n\n" + starts + "\n\n";
+          sql += "\n\n" + starts + "\n\n" + enders;
 
-          if (enders != "INSERT INTO creature_questender VALUES;")
-            sql += enders;
-          else
-           sql = sql.replace("DELETE FROM creature_questender WHERE id IN (" + entries[index] + ");", "");
+          if (sql.indexOf("DELETE FROM creature_queststarter WHERE id IN ();" > -1))
+          {
+              sql = sql.replace("DELETE FROM creature_queststarter WHERE id IN ();\n", "");
+              sql = sql.replace("\nINSERT INTO creature_queststarter VALUES;\n", "");
+          }
 
-          document.getElementById("SQL").innerHTML = sql;
+          if (sql.indexOf("DELETE FROM creature_questender WHERE id IN ();" > -1))
+          {
+            sql = sql.replace("DELETE FROM creature_questender WHERE id IN ();\n", "");
+            sql = sql.replace("\nINSERT INTO creature_questender VALUES;", "");
+          }
+
+          document.getElementById("SQL").value = sql;
         }
       }  
     }, 100); // each 0,1 seconds

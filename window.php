@@ -14,18 +14,20 @@ $npcId = str_replace("#starts", "", $npcId);
   var npcId = '<?= $npcId ?>';
 
   window.onload = function() {
+
+    /*
     // Remove all useless tabs
     for (var i = 0; i < tabsRelated.tabs.length; i++)
     {
       if(tabsRelated.tabs[i].id != "starts" && tabsRelated.tabs[i].id != "ends" )
       {
         tabsRelated.tabs.splice(i, 1);
-        i--;
       }
     }
+    */
 
     // initialize variables
-    var a,ids = [],s;
+    var a,ids = [],s, starts = false, ends = false;
 
     ids[0] = "";
     ids[1] = "";
@@ -33,30 +35,61 @@ $npcId = str_replace("#starts", "", $npcId);
 
 
     // Insert into element "#text" the HTML inside the tab "starts"
-    document.getElementById("text").innerHTML = tabsRelated.tabs[0].owner.currentTabContents.innerHTML;
-
-    // select all element "a" (<a>) and extract the link href, removing "/quest=" to href, to obtain only the id of the quest
-    a = document.getElementById("text").getElementsByTagName("a");
-
-    for (var i = 0; i < a.length; i++)
+    for (var i = 0; i < tabsRelated.tabs.length; i++)
     {
-      s = a[i].getAttribute("href");
-      if (s != null)
+      if (tabsRelated.tabs[i].id == "starts")
       {
-        if (s.indexOf("/quest=") > -1)
-        {
-          s = s.replace("http://www.wowhead.com/quest=", "");
-          ids[0] += "\n("+npcId+", "+s+"),";
-        }
+        document.getElementById("text").innerHTML = tabsRelated.tabs[i].owner.currentTabContents.innerHTML;
+        starts = true;
+        break;
       }
     }
 
-    if (tabsRelated.tabs[1] != null)
+    if (starts)
     {
+      // select all element "a" (<a>) and extract the link href, removing "/quest=" to href, to obtain only the id of the quest
+      a = document.getElementById("text").getElementsByTagName("a");
 
-      // Insert into element "#text" the HTML inside the tab "ends"
-      document.getElementById("text").innerHTML = tabsRelated.tabs[1].owner.currentTabContents.innerHTML;
+      for (var i = 0; i < a.length; i++)
+      {
+        s = a[i].getAttribute("href");
+        if (s != null)
+        {
+          if (s.indexOf("/quest=") > -1)
+          {
+            s = s.replace("http://www.wowhead.com/quest=", "");
+            ids[0] += "\n("+npcId+", "+s+"),";
+          }
+        }
+      }
+    }
+    else
+      ids[0] = "empty";
 
+    // click to "ends" tab, to load all the quests ends
+    var a = document.getElementsByTagName("a");
+    for (var i = 0; i < a.length; i++)
+    {
+      if(a[i].getAttribute("href") == "#ends")
+      {
+        a[i].click();
+        break;
+      }
+    }
+
+    // Insert into element "#text" the HTML inside the tab "ends"
+    for (var i = 0; i < tabsRelated.tabs.length; i++)
+    {
+      if (tabsRelated.tabs[i].id == "ends")
+      {
+        document.getElementById("text").innerHTML = tabsRelated.tabs[i].owner.currentTabContents.innerHTML;
+        ends = true;
+        break;
+      }
+    }
+
+    if (ends)
+    {
       // select all element "a" (<a>) and extract the link href, removing "/quest=" to href, to obtain only the id of the quest
       a = document.getElementById("text").getElementsByTagName("a");
       for (var i = 0; i < a.length; i++)
@@ -72,6 +105,11 @@ $npcId = str_replace("#starts", "", $npcId);
         }
       }
     }
+    else
+      ids[1] = "empty";
+
+    ids[3] = starts;
+    ids[4] = ends;
 
     //document.write(ids);
     window.opener['win'] = ids;
