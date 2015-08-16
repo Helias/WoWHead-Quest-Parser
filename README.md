@@ -1,8 +1,6 @@
 # WoWHead-Quest-Parser
 This tool extract the data of "creature quest starts and ends" from WoWHead generating the SQL code
 
-(This still is a beta version).
-
 ## Usage
 
 Open the file "starter.html" insert the entries divided by a comma and click on Extract.
