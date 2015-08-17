@@ -4,11 +4,10 @@
 </style>
 <center>
   <h1>Quest Starts/Ends WoWHead Data Parser</h1>
-  <br>
   <input type="text" placeholder="12345, 12346, 12347, 12348" id="entries">
   <button OnClick="getEntries(); parseNPC(0);">Extract!</button>
   <br><br>
-  <textarea id="SQL" cols="100" rows="50"></textarea>
+  <textarea id="SQL" cols="100" rows="30"></textarea>
 </center>
 <script>
   function getEntries()
@@ -83,11 +82,20 @@
 
           sql = tmp;
 
+          // Put semicolon (;) to the last row
           starts += ";";
-          enders += ";";
+          var tmp_   = starts.lastIndexOf("), --");
+          var tmp_2  = starts.lastIndexOf(";");
+          var replace     = starts.substring(tmp_, tmp_2+1);
+          var replaceWith = replace.replace(";", "").replace("), --", "); --");
+          starts = starts.replace(replace, replaceWith);
 
-          starts = starts.replace(",;", ";");
-          enders = enders.replace(",;", ";");
+          enders += ";";
+          tmp_   = enders.lastIndexOf("), --");
+          tmp_2  = enders.lastIndexOf(";");
+          replace     = enders.substring(tmp_, tmp_2+1);
+          replaceWith = replace.replace(";", "").replace("), --", "); --");
+          enders = enders.replace(replace, replaceWith);
 
           sql += "\n\n" + starts + "\n\n" + enders;
 
@@ -105,7 +113,7 @@
 
           document.getElementById("SQL").value = sql;
         }
-      }  
+      }
     }, 100); // each 0,1 seconds
 
   }

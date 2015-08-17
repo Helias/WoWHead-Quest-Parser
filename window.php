@@ -15,16 +15,7 @@ $npcId = str_replace("#starts", "", $npcId);
 
   window.onload = function() {
 
-    /*
-    // Remove all useless tabs
-    for (var i = 0; i < tabsRelated.tabs.length; i++)
-    {
-      if(tabsRelated.tabs[i].id != "starts" && tabsRelated.tabs[i].id != "ends" )
-      {
-        tabsRelated.tabs.splice(i, 1);
-      }
-    }
-    */
+    var npcName = document.getElementsByTagName("title")[0].innerHTML.replace(" - NPC - World of Warcraft", "");
 
     // initialize variables
     var a,ids = [],s, starts = false, ends = false;
@@ -58,7 +49,7 @@ $npcId = str_replace("#starts", "", $npcId);
           if (s.indexOf("/quest=") > -1)
           {
             s = s.replace("http://www.wowhead.com/quest=", "");
-            ids[0] += "\n("+npcId+", "+s+"),";
+            ids[0] += "\n(" + npcId + ", " + s + "), -- "+ npcName + ", "+ a[i].innerHTML;
           }
         }
       }
@@ -100,7 +91,7 @@ $npcId = str_replace("#starts", "", $npcId);
           if (s.indexOf("/quest=") > -1)
           {
             s = s.replace("http://www.wowhead.com/quest=", "");
-            ids[1] += "\n("+npcId+", "+s+"),";
+            ids[1] += "\n(" + npcId + ", " + s + "), -- "+ npcName + ", "+ a[i].innerHTML;;
           }
         }
       }
