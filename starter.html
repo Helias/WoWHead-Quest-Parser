@@ -99,16 +99,18 @@
 
           sql += "\n\n" + starts + "\n\n" + enders;
 
-          if (sql.indexOf("DELETE FROM `creature_queststarter` WHERE `id` IN ();" > -1))
+          alert(sql);
+
+          if (sql.indexOf("INSERT INTO `creature_queststarter` VALUES\n(") == -1)
           {
               sql = sql.replace("DELETE FROM `creature_queststarter` WHERE `id` IN ();\n", "");
-              sql = sql.replace("\nINSERT INTO `creature_queststarter` VALUES;\n", "");
+              sql = sql.replace("\nINSERT INTO `creature_queststarter` VALUES\n", "");
           }
 
-          if (sql.indexOf("DELETE FROM `creature_questender` WHERE `id` IN ();" > -1))
+          if (sql.indexOf("INSERT INTO `creature_questender` VALUES\n(") == -1)
           {
             sql = sql.replace("DELETE FROM `creature_questender` WHERE `id` IN ();\n", "");
-            sql = sql.replace("\nINSERT INTO `creature_questender` VALUES;", "");
+            sql = sql.replace("\nINSERT INTO `creature_questender` VALUES", "");
           }
 
           document.getElementById("SQL").value = sql;
