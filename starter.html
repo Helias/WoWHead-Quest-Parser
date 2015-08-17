@@ -99,8 +99,6 @@
 
           sql += "\n\n" + starts + "\n\n" + enders;
 
-          alert(sql);
-
           if (sql.indexOf("INSERT INTO `creature_queststarter` VALUES\n(") == -1)
           {
               sql = sql.replace("DELETE FROM `creature_queststarter` WHERE `id` IN ();\n", "");
