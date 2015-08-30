@@ -6,14 +6,16 @@ $npcId = str_replace("http://www.wowhead.com/npc=", "", $_GET['url']);
 $npcId = str_replace("#starts", "", $npcId);
 
 ?>
-<style>* { display: none; }</style>
+<style>/** { display: none; }*/</style>
 <p id="text"></p>
 
 <script>
   // passing the NPC ID from PHP to javascript
   var npcId = '<?= $npcId ?>';
 
-  window.onload = function() {
+  //  window.onload =
+
+  function load() {
 
     var npcName = document.getElementsByTagName("title")[0].innerHTML.replace(" - NPC - World of Warcraft", "");
 
@@ -103,7 +105,7 @@ $npcId = str_replace("#starts", "", $npcId);
     ids[4] = ends;
 
     //document.write(ids);
-    window.opener['win'] = ids;
-    this.close();
-  };
+    window.opener.asd(ids);
+  }
+  setTimeout("load();", 5000);
 </script>
