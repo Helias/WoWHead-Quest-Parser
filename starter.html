@@ -21,7 +21,14 @@
   else
     table = "gameobject";
 
-  function change_type(val) { type = val; }
+  function change_type(val)
+  {
+    type = val;
+    if (type == "npc")
+      table = "creature";
+    else
+      table = "gameobject";
+  }
 
   function getEntries()
   {
