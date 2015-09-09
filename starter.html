@@ -1,24 +1,36 @@
 <style>
-  #entries, button { font-size: 25px; height: 75px; }
+  #entries, button, select { font-size: 25px; height: 75px; }
   textarea { font-size: 20px; }
 </style>
 <center>
   <h1>Quest Starts/Ends WoWHead Data Parser</h1>
   <input type="text" placeholder="12345, 12346, 12347, 12348" id="entries">
-  <button OnClick="getEntries(); parseNPC(0);">Extract!</button>
+  <select id="type" OnChange="change_type(this.value);">
+    <option value="npc">NPC</option>
+    <option value="object">GO</option>
+  </select>
+  <button OnClick="getEntries(); parse(0);">Extract!</button>
   <br><br>
   <textarea id="SQL" cols="100" rows="30"></textarea>
 </center>
 <script>
-  var index = 0;
+  var index = 0, type = document.getElementById("type").value, table;
+
+  if (type == "npc")
+    table = "creature";
+  else
+    table = "gameobject";
+
+  function change_type(val) { type = val; }
+
   function getEntries()
   {
     // Reset the sql code variables
     del = [];
-    del[0] = "DELETE FROM `creature_queststarter` WHERE `id` IN (";
-    del[1] = "DELETE FROM `creature_questender` WHERE `id` IN (";
-    starts = "INSERT INTO `creature_queststarter` VALUES";
-    enders = "INSERT INTO `creature_questender` VALUES";
+    del[0] = "DELETE FROM `" + table + "_queststarter` WHERE `id` IN (";
+    del[1] = "DELETE FROM `" + table + "_questender` WHERE `id` IN (";
+    starts = "INSERT INTO `" + table + "_queststarter` VALUES";
+    enders = "INSERT INTO `" + table + "_questender` VALUES";
     sql = "";
     document.getElementById("SQL").value = "";
 
@@ -31,11 +43,11 @@
   function asd(res) {
     var windowData = res; // windowData is the data that the window pass to the window parent
     /*
-      windowData[0]: ids of the quests starter, it is "empty" if the creature hans't any quest starts
-      windowData[1]: ids of the quests ender, it is "empty" if the creature hans't any quest ends
-      windowData[2]: is the id of the NPC
-      windowData[3]: boolean value if the npc has starts quest or not
-      windowData[4]: boolean value if the npc has ends quest or not
+      windowData[0]: ids of the quests starter, it is "empty" if the npc/go hans't any quest starts
+      windowData[1]: ids of the quests ender, it is "empty" if the npc/go hans't any quest ends
+      windowData[2]: is the id of the NPC/GO
+      windowData[3]: boolean value if the npc/go has starts quest or not
+      windowData[4]: boolean value if the npc/go has ends quest or not
     */
     win.close();
     sql = "";
@@ -61,7 +73,7 @@
     if (entries.length-1 > index)
     {
       index++;
-      parseNPC(index);
+      parse(index);
     }
     else
     {
@@ -91,35 +103,35 @@
 
       sql += "\n\n" + starts + "\n\n" + enders;
 
-      if (sql.indexOf("INSERT INTO `creature_queststarter` VALUES\n(") == -1)
+      if (sql.indexOf("INSERT INTO `" + table + "_queststarter` VALUES\n(") == -1)
       {
-        sql = sql.replace("DELETE FROM `creature_queststarter` WHERE `id` IN ();\n", "");
-        sql = sql.replace("\nINSERT INTO `creature_queststarter` VALUES\n", "");
+        sql = sql.replace("DELETE FROM `" + table + "_queststarter` WHERE `id` IN ();\n", "");
+        sql = sql.replace("\nINSERT INTO `" + table + "_queststarter` VALUES\n", "");
       }
 
-      if (sql.indexOf("INSERT INTO `creature_questender` VALUES\n(") == -1)
+      if (sql.indexOf("INSERT INTO `" + table + "_questender` VALUES\n(") == -1)
       {
-        sql = sql.replace("DELETE FROM `creature_questender` WHERE `id` IN ();\n", "");
-        sql = sql.replace("\nINSERT INTO `creature_questender` VALUES", "");
+        sql = sql.replace("DELETE FROM `" + table + "_questender` WHERE `id` IN ();\n", "");
+        sql = sql.replace("\nINSERT INTO `" + table + "_questender` VALUES", "");
       }
 
       document.getElementById("SQL").value = sql;
     }
   }
 
-  function parseNPC()
+  function parse()
   {
     var current_url = window.location.href;
     current_url = current_url.replace("starter.html", "");
-    url = current_url + "window.php?url=http://www.wowhead.com/npc=" + entries[index] + "#starts";
+    url = current_url + "window.php?url=http://www.wowhead.com/" + type + "=" + entries[index] + "#starts";
     win = window.open(url, "window", 10, 10, "menubar=0,toolbar=0");
   }
 
   var entries = [];
-  var url, win, starts = "INSERT INTO `creature_queststarter` VALUES", enders = "INSERT INTO `creature_questender` VALUES", del = [], sql;
+  var url, win, starts = "INSERT INTO `" + table + "_queststarter` VALUES", enders = "INSERT INTO `" + table + "_questender` VALUES", del = [], sql;
 
-  del[0] = "DELETE FROM `creature_queststarter` WHERE `id` IN (";
-  del[1] = "DELETE FROM `creature_questender` WHERE `id` IN (";
+  del[0] = "DELETE FROM `" + table + "_queststarter` WHERE `id` IN (";
+  del[1] = "DELETE FROM `" + table + "_questender` WHERE `id` IN (";
 </script>
 
 <center>  Coded By <a href="https://github.com/Helias">Helias</a></center>

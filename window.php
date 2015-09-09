@@ -1,30 +1,40 @@
 <?php
 echo file_get_contents($_GET['url']);
 
-// extracting id of the NPC
-$npcId = str_replace("http://www.wowhead.com/npc=", "", $_GET['url']);
-$npcId = str_replace("#starts", "", $npcId);
+if(strpos($_GET['url'], "npc"))
+  $type = "npc";
+else
+  $type = "object";
+
+
+// extracting id of the NPC/GO
+$Id = str_replace("http://www.wowhead.com/".$type."=", "", $_GET['url']);
+$Id = str_replace("#starts", "", $Id);
+echo '<script>aler("'.$id.'");</script>';
 
 ?>
 <style>/** { display: none; }*/</style>
 <p id="text"></p>
 
 <script>
-  // passing the NPC ID from PHP to javascript
-  var npcId = '<?= $npcId ?>';
+  // passing the NPC/GO ID an d type from PHP to javascript
+  var Id = '<?= $Id ?>', type = '<?= $type ?>';
 
   //  window.onload =
 
   function load() {
 
-    var npcName = document.getElementsByTagName("title")[0].innerHTML.replace(" - NPC - World of Warcraft", "");
+    if (type == "npc")
+      var Name = document.getElementsByTagName("title")[0].innerHTML.replace(" - NPC - World of Warcraft", "");
+    else
+      var Name = document.getElementsByTagName("title")[0].innerHTML.replace(" - Object - World of Warcraft", "");
 
     // initialize variables
     var a,ids = [],s, starts = false, ends = false;
 
     ids[0] = "";
     ids[1] = "";
-    ids[2] = npcId;
+    ids[2] = Id;
 
 
     // Insert into element "#text" the HTML inside the tab "starts"
@@ -51,7 +61,7 @@ $npcId = str_replace("#starts", "", $npcId);
           if (s.indexOf("/quest=") > -1)
           {
             s = s.replace("http://www.wowhead.com/quest=", "");
-            ids[0] += "\n(" + npcId + ", " + s + "), -- "+ npcName + ", "+ a[i].innerHTML;
+            ids[0] += "\n(" + Id + ", " + s + "), -- " + Name + ", "+ a[i].innerHTML;
           }
         }
       }
@@ -93,7 +103,7 @@ $npcId = str_replace("#starts", "", $npcId);
           if (s.indexOf("/quest=") > -1)
           {
             s = s.replace("http://www.wowhead.com/quest=", "");
-            ids[1] += "\n(" + npcId + ", " + s + "), -- "+ npcName + ", "+ a[i].innerHTML;;
+            ids[1] += "\n(" + Id + ", " + s + "), -- "+ Name + ", "+ a[i].innerHTML;;
           }
         }
       }
