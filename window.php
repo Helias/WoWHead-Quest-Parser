@@ -61,6 +61,7 @@ echo '<script>aler("'.$id.'");</script>';
           if (s.indexOf("/quest=") > -1)
           {
             s = s.replace("http://www.wowhead.com/quest=", "");
+            s = s.replace("/quest=", "");
             ids[0] += "\n(" + Id + ", " + s + "), -- " + Name + ", "+ a[i].innerHTML;
           }
         }
@@ -103,6 +104,7 @@ echo '<script>aler("'.$id.'");</script>';
           if (s.indexOf("/quest=") > -1)
           {
             s = s.replace("http://www.wowhead.com/quest=", "");
+            s = s.replace("/quest=", "");
             ids[1] += "\n(" + Id + ", " + s + "), -- "+ Name + ", "+ a[i].innerHTML;;
           }
         }
@@ -114,8 +116,7 @@ echo '<script>aler("'.$id.'");</script>';
     ids[3] = starts;
     ids[4] = ends;
 
-    //document.write(ids);
     window.opener.asd(ids);
   }
-  setTimeout("load();", 5000);
+  load();
 </script>
