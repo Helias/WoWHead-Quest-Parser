@@ -10,7 +10,7 @@ else
 // extracting id of the NPC/GO
 $Id = str_replace("http://www.wowhead.com/".$type."=", "", $_GET['url']);
 $Id = str_replace("#starts", "", $Id);
-echo '<script>alert("'.$id.'");</script>';
+//echo '<script>alert("'.$id.'");</script>';
 
 ?>
 <style>/** { display: none; }*/</style>
@@ -116,7 +116,7 @@ echo '<script>alert("'.$id.'");</script>';
     ids[3] = starts;
     ids[4] = ends;
 
-    window.opener.asd(ids);
+    window.opener.genSql(ids);
   }
   load();
 </script>
